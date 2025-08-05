@@ -24,13 +24,25 @@
       color: #333;
     }
 
-    /* Banner (Header) */
+    /* Header (Banner) */
     header {
       background-color: var(--main-color);
       padding: 20px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-left img {
+      height: 50px;
+      object-fit: contain;
     }
 
     header h1 {
@@ -51,7 +63,7 @@
       color: var(--accent-color);
     }
 
-    /* Content Sections */
+    /* Sections */
     section {
       padding: 60px 40px;
     }
@@ -79,6 +91,17 @@
       70% { opacity: 1; }
       100% { opacity: 0; display: none; }
     }
+
+    @media (max-width: 600px) {
+      nav a {
+        margin-left: 10px;
+      }
+      .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -88,7 +111,10 @@
 
   <!-- Header -->
   <header>
-    <h1>Medical Syrian Club</h1>
+    <div class="header-left">
+      <h1>Medical Syrian Club</h1>
+      <img src="falcon.png" alt="Falcon Logo" />
+    </div>
     <nav>
       <a href="#home">Home</a>
       <a href="#about">About</a>
@@ -99,17 +125,14 @@
   <!-- Sections -->
   <section id="home">
     <h2>Home</h2>
-    <p>Welcome to the Medical Syrian Club! This is our homepage. More content coming soon.</p>
   </section>
 
   <section id="about">
     <h2>About</h2>
-    <p>We are a community of medical students and professionals supporting Syrian youth in healthcare and beyond.</p>
   </section>
 
   <section id="members">
     <h2>Members</h2>
-    <p>Meet our team! (You can add member profiles here later.)</p>
   </section>
 
 </body>
