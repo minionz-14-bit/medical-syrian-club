@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Syrian Club</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@100..900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --main-color: #2eb9d1;
+      --accent-color: #f5e4bf;
+      --font-family: 'Nata Sans', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background-color: white;
+      color: #333;
+    }
+
+    /* Banner (Header) */
+    header {
+      background-color: var(--main-color);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      color: white;
+      font-size: 24px;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent-color);
+    }
+
+    /* Content Sections */
+    section {
+      padding: 60px 40px;
+    }
+
+    section h2 {
+      color: var(--main-color);
+    }
+
+    /* Popup Message */
+    .popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--main-color);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      animation: fadeOut 4s ease forwards;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Popup -->
+  <div class="popup">Welcome!</div>
+
+  <!-- Header -->
+  <header>
+    <h1>Medical Syrian Club</h1>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#members">Members</a>
+    </nav>
+  </header>
+
+  <!-- Sections -->
+  <section id="home">
+    <h2>Home</h2>
+    <p>Welcome to the Medical Syrian Club! This is our homepage. More content coming soon.</p>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>We are a community of medical students and professionals supporting Syrian youth in healthcare and beyond.</p>
+  </section>
+
+  <section id="members">
+    <h2>Members</h2>
+    <p>Meet our team! (You can add member profiles here later.)</p>
+  </section>
+
+</body>
+</html>
