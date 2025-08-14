@@ -43,15 +43,22 @@ header {
   display: grid;
   grid-template-columns: 1fr auto 1fr; /* left | center | right */
   align-items: center;
+  position: relative;
 }
 
-header img,
-header .title {
-  justify-self: center; /* centers the logo + title together */
+.left-text {
+  justify-self: start; /* left corner */
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.center-logo {
+  height: 60px; /* adjust size as needed */
+  justify-self: center; /* centers the logo */
 }
 
 header #logout {
-  justify-self: end; /* pushes the button to the far right */
+  justify-self: end; /* right corner */
 }
 
 
@@ -87,10 +94,10 @@ header #logout {
 </head>
 <body>
   <header>
-    <img src="falcon.png" alt="Falcon">
-    <div class="title">Syrian Medical Youth Club — Hub</div>
-    <button id="logout" class="btn">Log out</button>
-  </header>
+  <div class="left-text">Syrian Medical Youth Club — Hub</div>
+  <img src="falcon.png" alt="Falcon" class="center-logo">
+  <button id="logout" class="btn">Log out</button>
+</header>
 
   <main>
   <div class="card">
