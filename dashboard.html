@@ -40,18 +40,20 @@ header {
   background: var(--main-color);
   color: #fff;
   padding: 16px 24px;
-  display: flex;           /* use flex to center content */
-  justify-content: center; /* horizontal centering */
-  align-items: center;     /* vertical centering */
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* left | center | right */
+  align-items: center;
 }
 
-header img {
-  height: calc(44px * 1.2); /* 20% larger */
-  max-width: 100%;
-  object-fit: contain;
-  display: block;
+header img,
+header .title {
+  justify-self: center; /* centers the logo + title together */
 }
+
+header #logout {
+  justify-self: end; /* pushes the button to the far right */
+}
+
 
     header .title { font-size: 1.2rem; font-weight: 700; }
     .btn {
@@ -134,6 +136,40 @@ header img {
         window.location.href = 'sign-in.html';
         return;
       }
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function updateStats() {
+  try {
+    // Reference to users collection
+    const usersRef = collection(db, "users");
+
+    // Get all users
+    const allUsersSnap = await getDocs(usersRef);
+    const totalUsers = allUsersSnap.size;
+    document.getElementById("total-users").textContent = totalUsers;
+
+    // Get active users — e.g., users with lastLogin within 24h
+    const now = Date.now();
+    const oneDayAgo = now - 24 * 60 * 60 * 1000; // 24 hours in ms
+    const activeUsersSnap = await getDocs(
+      query(usersRef, where("lastLogin", ">=", new Date(oneDayAgo)))
+    );
+    document.getElementById("active-users").textContent = activeUsersSnap.size;
+
+  } catch (err) {
+    console.error("Error fetching stats:", err);
+  }
+}
+
+// Call it after auth state confirmed
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  // existing greeting code ...
+
+  // update stats after greeting
+  updateStats();
+});
       // Fetch username for greeting
       try {
         const snap = await getDoc(doc(db, 'users', user.uid));
