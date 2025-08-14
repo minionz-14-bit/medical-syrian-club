@@ -71,6 +71,14 @@ header img {
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
       max-width: 900px;
     }
+.stats-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  max-width: 900px;
+  margin-top: 24px;
+}
     h1 { margin: 0 0 8px; color: var(--main-color); }
     .muted { color: #666; margin: 0 0 10px; }
   </style>
@@ -83,11 +91,19 @@ header img {
   </header>
 
   <main>
-    <div class="card">
-      <h1 id="greet">Welcome!</h1>
-      <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
-    </div>
-  </main>
+  <div class="card">
+    <h1 id="greet">Welcome!</h1>
+    <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
+  </div>
+
+  <!-- Add the stats box here, directly below the existing card -->
+  <div class="card stats-card">
+    <h2 style="font-family: 'Nata Sans', sans-serif; margin-bottom:12px;">Website Stats</h2>
+    <p>Total Users: <span id="total-users" style="color: red; font-weight: bold;">0</span></p>
+    <p>Active Users: <span id="active-users" style="color: green; font-weight: bold;">0</span></p>
+  </div>
+</main>
+
 
   <!-- Firebase (v10 modular via CDN) -->
   <script type="module">
