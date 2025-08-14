@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SMYC — Dashboard</title>
+
+  <!-- Brand font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --main-color: #2eb9d1;
+      --accent-color: #f5e4bf;
+      --bg-color: #faefcf;
+      --text: #333;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Nata Sans', sans-serif;
+      background: var(--bg-color);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    header {
+      background: var(--main-color);
+      color: #fff;
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    header img { height: 44px; object-fit: contain; }
+    header .title { font-size: 1.2rem; font-weight: 700; }
+    .btn {
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--main-color);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    main { padding: 24px; }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      max-width: 900px;
+    }
+    h1 { margin: 0 0 8px; color: var(--main-color); }
+    .muted { color: #666; margin: 0 0 10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="falcon.png" alt="Falcon">
+    <div class="title">Syrian Medical Youth Club — Hub</div>
+    <button id="logout" class="btn">Log out</button>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1 id="greet">Welcome!</h1>
+      <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
+    </div>
+  </main>
+
+  <!-- Firebase (v10 modular via CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 🔧 Your Firebase project (Medical Club)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
+      authDomain: "syrian-medical-youth-club.firebaseapp.com",
+      projectId: "syrian-medical-youth-club",
+      storageBucket: "syrian-medical-youth-club.firebasestorage.app",
+      messagingSenderId: "596607910050",
+      appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const greetEl = document.getElementById('greet');
+    const logoutBtn = document.getElementById('logout');
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        // Not signed in — send back to sign in
+        window.location.href = 'sign-in.html';
+        return;
+      }
+      // Fetch username for greeting
+      try {
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        const username = snap.exists() ? (snap.data().username || user.email) : user.email;
+        greetEl.textContent = `Welcome, ${username}!`;
+      } catch {
+        greetEl.textContent = `Welcome, ${user.email}!`;
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'sign-in.html';
+    });
+  </script>
+</body>
+</html>

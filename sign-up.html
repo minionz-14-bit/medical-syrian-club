@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Syrian Medical Youth Club — Sign Up</title>
+
+  <!-- Brand font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --main-color: #2eb9d1;
+      --accent-color: #f5e4bf;
+      --bg-color: #faefcf;
+      --text: #333;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Nata Sans', sans-serif;
+      background: var(--bg-color);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    header {
+      background: var(--main-color);
+      color: #fff;
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    header img { height: 48px; object-fit: contain; }
+    header .title { font-size: 1.4rem; font-weight: 700; }
+    .wrap {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 28px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      color: var(--main-color);
+      font-size: 1.4rem;
+    }
+    .sub { margin: 0 0 18px; color: #555; }
+    label { font-weight: 600; font-size: 0.95rem; }
+    input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .field { margin-bottom: 14px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--main-color);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform .02s ease-in-out, opacity .2s;
+    }
+    .btn:hover { opacity: 0.95; }
+    .btn:active { transform: translateY(1px); }
+    .muted {
+      margin-top: 12px;
+      text-align: center;
+      color: #666;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+    .muted a { color: var(--main-color); font-weight: 700; text-decoration: none; }
+    .muted a:hover { text-decoration: underline; }
+    .msg {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .msg.ok { background: #e8fbf0; color: #116b3a; border: 1px solid #b2f0cf; }
+    .msg.err { background: #ffefef; color: #9b1c1c; border: 1px solid #ffd1d1; }
+    .helper { font-size: 0.85rem; color: #777; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="falcon.png" alt="Falcon Logo">
+    <div class="title">Syrian Medical Youth Club</div>
+  </header>
+
+  <main class="wrap">
+    <div class="card">
+      <h1>Create your account</h1>
+      <p class="sub">Join the hub to access exclusive features.</p>
+
+      <form id="signup-form">
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" type="text" placeholder="Choose a unique username" minlength="3" maxlength="20" required />
+          <div class="helper">Letters, numbers, underscores only.</div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="your@email.com" required />
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Min 6 characters" minlength="6" required />
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm</label>
+            <input id="confirm" type="password" placeholder="Re-enter password" minlength="6" required />
+          </div>
+        </div>
+
+        <button class="btn" type="submit">Sign Up</button>
+        <div id="msg" class="msg"></div>
+      </form>
+
+      <p class="muted">
+        Already have an account?
+        <a href="sign-in.html">Sign in</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- Firebase (v10 modular via CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, collection, query, where, getDocs,
+      doc, setDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // 🔧 Your Firebase project (Medical Club)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
+      authDomain: "syrian-medical-youth-club.firebaseapp.com",
+      projectId: "syrian-medical-youth-club",
+      storageBucket: "syrian-medical-youth-club.firebasestorage.app",
+      messagingSenderId: "596607910050",
+      appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('signup-form');
+    const msgEl = document.getElementById('msg');
+
+    function showMsg(text, ok=false) {
+      msgEl.textContent = text;
+      msgEl.className = 'msg ' + (ok ? 'ok' : 'err');
+      msgEl.style.display = 'block';
+    }
+
+    function validUsername(u) {
+      return /^[a-zA-Z0-9_]{3,20}$/.test(u);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msgEl.style.display = 'none';
+
+      const username = document.getElementById('username').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirm').value;
+
+      if (!validUsername(username)) {
+        showMsg("Username must be 3–20 chars (letters, numbers, underscores).");
+        return;
+      }
+      if (password !== confirm) {
+        showMsg("Passwords do not match.");
+        return;
+      }
+
+      try {
+        // 1) Check username uniqueness
+        const q = query(collection(db, 'users'), where('username', '==', username));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          showMsg("That username is already taken. Please choose another.");
+          return;
+        }
+
+        // 2) Create auth user
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+
+        // 3) Create Firestore profile doc
+        await setDoc(doc(db, 'users', user.uid), {
+          username,
+          email,
+          createdAt: serverTimestamp()
+        });
+
+        showMsg("✅ Account created successfully! Redirecting to sign in…", true);
+        setTimeout(() => window.location.href = 'sign-in.html', 900);
+      } catch (err) {
+        if (err.code === 'auth/email-already-in-use') {
+          showMsg("This email is already in use. Try signing in.");
+        } else if (err.code === 'auth/invalid-email') {
+          showMsg("Invalid email format.");
+        } else if (err.code === 'auth/weak-password') {
+          showMsg("Password should be at least 6 characters.");
+        } else {
+          showMsg("Error: " + (err.message || 'Something went wrong.'));
+        }
+      }
+    });
+  </script>
+</body>
+</html>
