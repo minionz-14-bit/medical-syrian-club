@@ -1,240 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Syrian Medical Youth Club — Sign In</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Syrian Medical Youth Club — Sign In</title>
 
-  <!-- Brand font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@400;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --main-color: #2eb9d1;
-      --accent-color: #f5e4bf;
-      --bg-color: #faefcf;
-      --text: #333;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Nata Sans', sans-serif;
-      background: var(--bg-color);
-      color: var(--text);
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-    header {
-      background: var(--main-color);
-      color: #fff;
-      padding: 16px 24px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 12px;
-      align-items: center;
-    }
-    header img { height: 48px; object-fit: contain; }
-    header .title { font-size: 1.4rem; font-weight: 700; }
-    .wrap {
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-    .card {
-      width: 100%;
-      max-width: 440px;
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      padding: 28px;
-    }
-    h1 {
-      margin: 0 0 6px;
-      color: var(--main-color);
-      font-size: 1.4rem;
-    }
-    .sub {
-      margin: 0 0 18px;
-      color: #555;
-    }
-    label { font-weight: 600; font-size: 0.95rem; }
-    input {
-      width: 100%;
-      margin-top: 6px;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    .field { margin-bottom: 14px; }
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: 0;
-      border-radius: 10px;
-      background: var(--main-color);
-      color: #fff;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform .02s ease-in-out, opacity .2s;
-    }
-    .btn:hover { opacity: 0.95; }
-    .btn:active { transform: translateY(1px); }
-    .muted {
-      margin-top: 12px;
-      text-align: center;
-      color: #666;
-      font-size: 0.95rem;
-      font-style: italic;
-    }
-    .muted a {
-      color: var(--main-color);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .muted a:hover { text-decoration: underline; }
-    .msg {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      display: none;
-    }
-    .msg.ok { background: #e8fbf0; color: #116b3a; border: 1px solid #b2f0cf; }
-    .msg.err { background: #ffefef; color: #9b1c1c; border: 1px solid #ffd1d1; }
-    .helper { font-size: 0.85rem; color: #777; margin-top: 2px; }
-  </style>
+<style>
+:root {
+  --main-color: #2eb9d1;
+  --bg-color: #faefcf;
+  --text: #333;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Nata Sans', sans-serif;
+  background: var(--bg-color);
+  color: var(--text);
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+header {
+  background: var(--main-color);
+  color: #fff;
+  padding: 16px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+}
+header img { height: 48px; object-fit: contain; }
+header .title { font-size: 1.4rem; font-weight: 700; }
+.wrap { display: grid; place-items: center; padding: 24px; }
+.card { width: 100%; max-width: 440px; background: #fff; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 28px; }
+h1 { margin: 0 0 6px; color: var(--main-color); font-size: 1.4rem; }
+.sub { margin: 0 0 18px; color: #555; }
+label { font-weight: 600; font-size: 0.95rem; }
+input { width: 100%; margin-top: 6px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+.field { margin-bottom: 14px; }
+.btn { width: 100%; padding: 12px; border: 0; border-radius: 10px; background: var(--main-color); color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform .02s ease-in-out, opacity .2s; }
+.btn:hover { opacity: 0.95; }
+.btn:active { transform: translateY(1px); }
+.muted { margin-top: 12px; text-align: center; color: #666; font-size: 0.95rem; font-style: italic; }
+.muted a { color: var(--main-color); text-decoration: none; font-weight: 700; }
+.muted a:hover { text-decoration: underline; }
+.msg { margin-top: 10px; padding: 10px 12px; border-radius: 10px; font-size: 0.95rem; display: none; }
+.msg.ok { background: #e8fbf0; color: #116b3a; border: 1px solid #b2f0cf; }
+.msg.err { background: #ffefef; color: #9b1c1c; border: 1px solid #ffd1d1; }
+.helper { font-size: 0.85rem; color: #777; margin-top: 2px; }
+</style>
 </head>
 <body>
 
-  <header>
-    <img src="falcon.png" alt="Falcon Logo">
-    <div class="title">Syrian Medical Youth Club</div>
-  </header>
+<header>
+  <img src="falcon.png" alt="Falcon Logo">
+  <div class="title">Syrian Medical Youth Club</div>
+</header>
 
-  <main class="wrap">
-    <div class="card">
-      <h1>Welcome to Syrian Medical Youth Club</h1>
-      <p class="sub">To continue using our website, please sign in to your account.</p>
+<main class="wrap">
+  <div class="card">
+    <h1>Welcome to Syrian Medical Youth Club</h1>
+    <p class="sub">To continue using our website, please sign in to your account.</p>
 
-      <form id="login-form">
-        <div class="field">
-          <label for="identifier">Email or Username</label>
-          <input id="identifier" type="text" placeholder="e.g. ahmad@example.com or ahmad123" required />
-          <div class="helper">You can use your email or your username.</div>
-        </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" type="password" placeholder="Enter your password" required />
-        </div>
-        <button class="btn" type="submit">Sign In</button>
-        <div id="msg" class="msg"></div>
-      </form>
+    <form id="login-form">
+      <div class="field">
+        <label for="identifier">Email or Username</label>
+        <input id="identifier" type="text" placeholder="e.g. ahmad@example.com or ahmad123" required />
+        <div class="helper">You can use your email or your username.</div>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" required />
+      </div>
+      <button class="btn" type="submit">Sign In</button>
+      <div id="msg" class="msg"></div>
+    </form>
 
-      <p class="muted">
-        Don’t have an account?
-        <a href="sign-up.html">Sign up</a>
-      </p>
-    </div>
-  </main>
+    <p class="muted">
+      Don’t have an account? <a href="sign-up.html">Sign up</a>
+    </p>
+  </div>
+</main>
 
-  <!-- Firebase (v10 modular via CDN) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
+  authDomain: "syrian-medical-youth-club.firebaseapp.com",
+  projectId: "syrian-medical-youth-club",
+  storageBucket: "syrian-medical-youth-club.firebasestorage.app",
+  messagingSenderId: "596607910050",
+  appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
+};
 
-    // 🔧 Your Firebase project (Medical Club)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
-      authDomain: "syrian-medical-youth-club.firebaseapp.com",
-      projectId: "syrian-medical-youth-club",
-      storageBucket: "syrian-medical-youth-club.firebasestorage.app",
-      messagingSenderId: "596607910050",
-      appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
-    };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const form = document.getElementById('login-form');
+const msgEl = document.getElementById('msg');
 
-    const form = document.getElementById('login-form');
-    const msgEl = document.getElementById('msg');
+function showMsg(text, ok=false) {
+  msgEl.textContent = text;
+  msgEl.className = 'msg ' + (ok ? 'ok' : 'err');
+  msgEl.style.display = 'block';
+}
 
-    function showMsg(text, ok=false) {
-      msgEl.textContent = text;
-      msgEl.className = 'msg ' + (ok ? 'ok' : 'err');
-      msgEl.style.display = 'block';
-    }
-
-    // If already logged in, go straight to dashboard
-    // --- Only redirect if user is actually logged in ---
+// Redirect if already logged in
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("User detected, redirecting to dashboard");
-    // Use a tiny delay to ensure signOut has fully cleared session
-    setTimeout(() => {
-      window.location.href = 'dashboard.html';
-    }, 50); // 50ms is enough
-  } else {
-    console.log("No user logged in — stay on sign-in page");
+    window.location.href = 'dashboard.html';
   }
 });
 
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msgEl.style.display = 'none';
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      msgEl.style.display = 'none';
+  const identifier = document.getElementById('identifier').value.trim();
+  const password   = document.getElementById('password').value;
 
-      const identifier = document.getElementById('identifier').value.trim();
-      const password   = document.getElementById('password').value;
+  try {
+    let emailToUse = identifier;
 
-      try {
-        let emailToUse = identifier;
-
-        // If user typed a username (no @), resolve it to an email
-        if (!identifier.includes('@')) {
-          const q = query(collection(db, 'users'), where('username', '==', identifier));
-          const snap = await getDocs(q);
-          if (snap.empty) {
-            showMsg("We couldn't find that username. Please check or use your email.");
-            return;
-          }
-          // If multiple, use the first match (usernames should be unique in our sign-up)
-          emailToUse = snap.docs[0].data().email;
-        }
-
-        await signInWithEmailAndPassword(auth, emailToUse, password);
-// Update lastLogin timestamp for active users
-const userDocRef = doc(db, "users", auth.currentUser.uid);
-await updateDoc(userDocRef, { lastLogin: serverTimestamp() });
-        showMsg("✅ Signed in! Redirecting…", true);
-        window.location.href = 'dashboard.html';
-      } catch (err) {
-        // Common friendly errors
-        if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
-          showMsg("Incorrect credentials. Please try again.");
-        } else if (err.code === 'auth/user-not-found') {
-          showMsg("No account with that email. Try signing up.");
-        } else {
-          showMsg("Error: " + (err.message || 'Something went wrong.'));
-        }
+    // If user typed a username (no @), resolve it to an email
+    if (!identifier.includes('@')) {
+      const q = query(collection(db, 'users'), where('username', '==', identifier));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        showMsg("We couldn't find that username. Please check or use your email.");
+        return;
       }
-import { doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      emailToUse = snap.docs[0].data().email;
+    }
 
-// after signInWithEmailAndPassword(...)
-const user = auth.currentUser;
-if (user) {
-  await updateDoc(doc(db, 'users', user.uid), {
-    lastLogin: serverTimestamp()
-  });
-}
-    });
-  </script>
+    // Sign in
+    const cred = await signInWithEmailAndPassword(auth, emailToUse, password);
+
+    // Update lastLogin timestamp
+    const userRef = doc(db, 'users', cred.user.uid);
+    await updateDoc(userRef, { lastLogin: serverTimestamp() });
+
+    showMsg("✅ Signed in! Redirecting…", true);
+    setTimeout(() => window.location.href = 'dashboard.html', 300);
+  } catch (err) {
+    console.error(err);
+    if (err.code === 'auth/wrong-password') showMsg("Incorrect password. Please try again.");
+    else if (err.code === 'auth/user-not-found') showMsg("No account with that email. Try signing up.");
+    else showMsg("Error: " + (err.message || 'Something went wrong.'));
+  }
+});
+</script>
 </body>
 </html>
