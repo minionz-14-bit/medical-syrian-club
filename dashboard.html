@@ -121,12 +121,32 @@
       } catch {
         greetEl.textContent = `Welcome, ${user.email}!`;
       }
+// Reference to the current user's document
+const userRef = doc(db, 'users', user.uid);
 
+// Set user online immediately
+await updateDoc(userRef, { isOnline: true, lastActive: serverTimestamp() });
+
+// Update lastActive every 30 seconds
+setInterval(async () => {
+  await updateDoc(userRef, { lastActive: serverTimestamp() });
+}, 30000);
       updateStats();
+import { Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 2 minutes ago
+const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+
+const activeUsersSnap = await getDocs(
+  query(collection(db, "users"), where("lastActive", ">=", twoMinutesAgo))
+);
+document.getElementById("active-users").textContent = activeUsersSnap.size;
+
     });
 
     logoutBtn.addEventListener('click', async () => {
       try {
+	await updateDoc(userRef, { isOnline: false });
         await signOut(auth);
         localStorage.clear();
         sessionStorage.clear();
