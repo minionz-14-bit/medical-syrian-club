@@ -32,180 +32,109 @@
       color: #fff;
       padding: 16px 24px;
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 12px;
+      grid-template-columns: 1fr auto 1fr; /* left | center | right */
       align-items: center;
+      position: relative;
     }
-header {
-  background: var(--main-color);
-  color: #fff;
-  padding: 16px 24px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr; /* left | center | right */
-  align-items: center;
-  position: relative;
-}
-
-.left-text {
-  justify-self: start; /* left corner */
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.center-logo {
-  height: 60px; /* adjust size as needed */
-  justify-self: center; /* centers the logo */
-}
-
-header #logout {
-  justify-self: end; /* right corner */
-	position: relative;
-  z-index: 9999;
-}
-
-
-    header .title { font-size: 1.2rem; font-weight: 700; }
-    .btn {
-      padding: 10px 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #fff;
-      color: var(--main-color);
-      font-weight: 700;
-      cursor: pointer;
-    }
+    .left-text { justify-self: start; font-weight: bold; font-size: 1.2rem; }
+    .center-logo { height: 60px; justify-self: center; }
+    header #logout { justify-self: end; position: relative; z-index: 9999; }
+    .btn { padding: 10px 14px; border: 0; border-radius: 10px; background: #fff; color: var(--main-color); font-weight: 700; cursor: pointer; }
     main { padding: 24px; }
-    .card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      max-width: 900px;
-    }
-.stats-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 22px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  max-width: 900px;
-  margin-top: 24px;
-}
+    .card { background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 900px; margin-bottom: 24px; }
+    .stats-card { margin-top: 0; }
     h1 { margin: 0 0 8px; color: var(--main-color); }
+    h2 { margin-bottom:12px; font-family: 'Nata Sans', sans-serif; }
     .muted { color: #666; margin: 0 0 10px; }
   </style>
 </head>
 <body>
   <header>
-  <div class="left-text">Syrian Medical Youth Club — Hub</div>
-  <img src="falcon.png" alt="Falcon" class="center-logo">
-  <button id="logout" class="btn">Log out</button>
-</header>
+    <div class="left-text">Syrian Medical Youth Club — Hub</div>
+    <img src="falcon.png" alt="Falcon" class="center-logo">
+    <button id="logout" class="btn">Log out</button>
+  </header>
 
   <main>
-  <div class="card">
-    <h1 id="greet">Welcome!</h1>
-    <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
-  </div>
+    <div class="card">
+      <h1 id="greet">Welcome!</h1>
+      <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
+    </div>
 
-  <!-- Add the stats box here, directly below the existing card -->
-  <div class="card stats-card">
-    <h2 style="font-family: 'Nata Sans', sans-serif; margin-bottom:12px;">Website Stats</h2>
-    <p>Total Users: <span id="total-users" style="color: red; font-weight: bold;">0</span></p>
-    <p>Active Users: <span id="active-users" style="color: green; font-weight: bold;">0</span></p>
-  </div>
-</main>
+    <div class="card stats-card">
+      <h2>Website Stats</h2>
+      <p>Total Users: <span id="total-users" style="color: red; font-weight: bold;">0</span></p>
+      <p>Active Users (last 24h): <span id="active-users" style="color: green; font-weight: bold;">0</span></p>
+    </div>
+  </main>
 
-
-  <!-- Firebase (v10 modular via CDN) -->
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { 
-    getFirestore, doc, getDoc, collection, getDocs, query, where 
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // Firebase config (unchanged)
-  const firebaseConfig = {
-    apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
-    authDomain: "syrian-medical-youth-club.firebaseapp.com",
-    projectId: "syrian-medical-youth-club",
-    storageBucket: "syrian-medical-youth-club.firebasestorage.app",
-    messagingSenderId: "596607910050",
-    appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
+      authDomain: "syrian-medical-youth-club.firebaseapp.com",
+      projectId: "syrian-medical-youth-club",
+      storageBucket: "syrian-medical-youth-club.firebasestorage.app",
+      messagingSenderId: "596607910050",
+      appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
+    };
 
-  // Init
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-document.getElementById('logout').addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-    window.location.href = 'sign-in.html'; // Direct redirect after logout
-  } catch (error) {
-    console.error("Error signing out:", error);
-  }
-});
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  // Elements
-  const greetEl = document.getElementById('greet');
-  const logoutBtn = document.getElementById('logout');
+    const greetEl = document.getElementById('greet');
+    const logoutBtn = document.getElementById('logout');
 
-  // --- Stats updater ---
-  async function updateStats() {
-    try {
-      const usersRef = collection(db, "users");
+    async function updateStats() {
+      try {
+        const usersRef = collection(db, "users");
 
-      // Total users
-      const allUsersSnap = await getDocs(usersRef);
-      document.getElementById("total-users").textContent = allUsersSnap.size;
+        // Total users
+        const allUsersSnap = await getDocs(usersRef);
+        document.getElementById("total-users").textContent = allUsersSnap.size;
 
-      // Active users in last 24h
-import { Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-      const activeUsersSnap = await getDocs(
-        query(usersRef, where("lastLogin", ">=", new Date(oneDayAgo)))
-      );
-      document.getElementById("active-users").textContent = activeUsersSnap.size;
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  }
-
-  // --- Auth guard + greet + stats ---
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      // Not signed in — go to sign-in page
-      window.location.href = 'sign-in.html';     // if sign-in.html is in the same folder
-      // window.location.replace('/sign-in.html'); // use this if your pages are at the site root
-      return;
+        // Active users (last 24h)
+        const oneDayAgo = Timestamp.fromMillis(Date.now() - 24 * 60 * 60 * 1000);
+        const activeQuery = query(usersRef, where("lastLogin", ">=", oneDayAgo));
+        const activeSnap = await getDocs(activeQuery);
+        document.getElementById("active-users").textContent = activeSnap.size;
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
     }
 
-    // Greet
-    try {
-      const snap = await getDoc(doc(db, 'users', user.uid));
-      const username = snap.exists() ? (snap.data().username || user.email) : user.email;
-      greetEl.textContent = `Welcome, ${username}!`;
-    } catch {
-      greetEl.textContent = `Welcome, ${user.email}!`;
-    }
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = 'sign-in.html';
+        return;
+      }
 
-    // Stats
-    updateStats();
-  });
+      // Greet user
+      try {
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        const username = snap.exists() ? (snap.data().username || user.email) : user.email;
+        greetEl.textContent = `Welcome, ${username}!`;
+      } catch {
+        greetEl.textContent = `Welcome, ${user.email}!`;
+      }
 
-  // --- Logout handler (with fallback redirect) ---
-  logoutBtn.addEventListener('click', async () => {
-  try {
-    await signOut(auth);       // Sign out from Firebase
-    localStorage.clear();      // Clear local storage
-    sessionStorage.clear();    // Clear session storage
-    window.location.href = "sign-in.html"; // Redirect to sign-in page
-  } catch (error) {
-    console.error("Error signing out:", error);
-  }
-});
+      updateStats();
+    });
 
-</script>
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "sign-in.html";
+      } catch (err) {
+        console.error("Error signing out:", err);
+      }
+    });
+  </script>
 </body>
 </html>
