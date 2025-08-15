@@ -172,9 +172,19 @@
     }
 
     // If already logged in, go straight to dashboard
-    onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = 'dashboard.html';
-    });
+    // --- Only redirect if user is actually logged in ---
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User detected, redirecting to dashboard");
+    // Use a tiny delay to ensure signOut has fully cleared session
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 50); // 50ms is enough
+  } else {
+    console.log("No user logged in — stay on sign-in page");
+  }
+});
+
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();

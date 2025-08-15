@@ -59,6 +59,8 @@ header {
 
 header #logout {
   justify-self: end; /* right corner */
+	position: relative;
+  z-index: 9999;
 }
 
 
@@ -116,81 +118,93 @@ header #logout {
 
   <!-- Firebase (v10 modular via CDN) -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { 
+    getFirestore, doc, getDoc, collection, getDocs, query, where 
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // 🔧 Your Firebase project (Medical Club)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
-      authDomain: "syrian-medical-youth-club.firebaseapp.com",
-      projectId: "syrian-medical-youth-club",
-      storageBucket: "syrian-medical-youth-club.firebasestorage.app",
-      messagingSenderId: "596607910050",
-      appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
-    };
+  // Firebase config (unchanged)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
+    authDomain: "syrian-medical-youth-club.firebaseapp.com",
+    projectId: "syrian-medical-youth-club",
+    storageBucket: "syrian-medical-youth-club.firebasestorage.app",
+    messagingSenderId: "596607910050",
+    appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const greetEl = document.getElementById('greet');
-    const logoutBtn = document.getElementById('logout');
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        // Not signed in — send back to sign in
-        window.location.href = 'sign-in.html';
-        return;
-      }
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-async function updateStats() {
+  // Init
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+document.getElementById('logout').addEventListener('click', async () => {
   try {
-    // Reference to users collection
-    const usersRef = collection(db, "users");
-
-    // Get all users
-    const allUsersSnap = await getDocs(usersRef);
-    const totalUsers = allUsersSnap.size;
-    document.getElementById("total-users").textContent = totalUsers;
-
-    // Get active users — e.g., users with lastLogin within 24h
-    const now = Date.now();
-    const oneDayAgo = now - 24 * 60 * 60 * 1000; // 24 hours in ms
-    const activeUsersSnap = await getDocs(
-      query(usersRef, where("lastLogin", ">=", new Date(oneDayAgo)))
-    );
-    document.getElementById("active-users").textContent = activeUsersSnap.size;
-
-  } catch (err) {
-    console.error("Error fetching stats:", err);
+    await signOut(auth);
+    window.location.href = 'sign-in.html'; // Direct redirect after logout
+  } catch (error) {
+    console.error("Error signing out:", error);
   }
-}
-
-// Call it after auth state confirmed
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
-
-  // existing greeting code ...
-
-  // update stats after greeting
-  updateStats();
 });
-      // Fetch username for greeting
-      try {
-        const snap = await getDoc(doc(db, 'users', user.uid));
-        const username = snap.exists() ? (snap.data().username || user.email) : user.email;
-        greetEl.textContent = `Welcome, ${username}!`;
-      } catch {
-        greetEl.textContent = `Welcome, ${user.email}!`;
-      }
-    });
 
-    logoutBtn.addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = 'sign-in.html';
-    });
-  </script>
+  // Elements
+  const greetEl = document.getElementById('greet');
+  const logoutBtn = document.getElementById('logout');
+
+  // --- Stats updater ---
+  async function updateStats() {
+    try {
+      const usersRef = collection(db, "users");
+
+      // Total users
+      const allUsersSnap = await getDocs(usersRef);
+      document.getElementById("total-users").textContent = allUsersSnap.size;
+
+      // Active users in last 24h
+      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      const activeUsersSnap = await getDocs(
+        query(usersRef, where("lastLogin", ">=", new Date(oneDayAgo)))
+      );
+      document.getElementById("active-users").textContent = activeUsersSnap.size;
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  }
+
+  // --- Auth guard + greet + stats ---
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      // Not signed in — go to sign-in page
+      window.location.href = 'sign-in.html';     // if sign-in.html is in the same folder
+      // window.location.replace('/sign-in.html'); // use this if your pages are at the site root
+      return;
+    }
+
+    // Greet
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      const username = snap.exists() ? (snap.data().username || user.email) : user.email;
+      greetEl.textContent = `Welcome, ${username}!`;
+    } catch {
+      greetEl.textContent = `Welcome, ${user.email}!`;
+    }
+
+    // Stats
+    updateStats();
+  });
+
+  // --- Logout handler (with fallback redirect) ---
+  logoutBtn.addEventListener('click', async () => {
+  try {
+    await signOut(auth);       // Sign out from Firebase
+    localStorage.clear();      // Clear local storage
+    sessionStorage.clear();    // Clear session storage
+    window.location.href = "sign-in.html"; // Redirect to sign-in page
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
+});
+
+</script>
 </body>
 </html>
