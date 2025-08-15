@@ -1,160 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SMYC — Dashboard</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SMYC — Dashboard</title>
 
-  <!-- Brand font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@400;700&display=swap" rel="stylesheet">
+<!-- Brand font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nata+Sans:wght@400;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --main-color: #2eb9d1;
-      --accent-color: #f5e4bf;
-      --bg-color: #faefcf;
-      --text: #333;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Nata Sans', sans-serif;
-      background: var(--bg-color);
-      color: var(--text);
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-    header {
-      background: var(--main-color);
-      color: #fff;
-      padding: 16px 24px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr; /* left | center | right */
-      align-items: center;
-      position: relative;
-    }
-    .left-text { justify-self: start; font-weight: bold; font-size: 1.2rem; }
-    .center-logo { height: 60px; justify-self: center; }
-    header #logout { justify-self: end; position: relative; z-index: 9999; }
-    .btn { padding: 10px 14px; border: 0; border-radius: 10px; background: #fff; color: var(--main-color); font-weight: 700; cursor: pointer; }
-    main { padding: 24px; }
-    .card { background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 900px; margin-bottom: 24px; }
-    .stats-card { margin-top: 0; }
-    h1 { margin: 0 0 8px; color: var(--main-color); }
-    h2 { margin-bottom:12px; font-family: 'Nata Sans', sans-serif; }
-    .muted { color: #666; margin: 0 0 10px; }
-  </style>
+<style>
+:root {
+  --main-color: #2eb9d1;
+  --bg-color: #faefcf;
+  --text: #333;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Nata Sans', sans-serif;
+  background: var(--bg-color);
+  color: var(--text);
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+header {
+  background: var(--main-color);
+  color: #fff;
+  padding: 16px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+.left-text { justify-self: start; font-weight: bold; font-size: 1.2rem; }
+.center-logo { height: 60px; justify-self: center; }
+#logout { justify-self: end; padding: 10px 14px; border: 0; border-radius: 10px; background: #fff; color: var(--main-color); font-weight: 700; cursor: pointer; }
+main { padding: 24px; }
+.card { background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 900px; margin-bottom: 24px; }
+.stats-card { margin-top: 0; }
+h1 { margin: 0 0 8px; color: var(--main-color); }
+h2 { margin-bottom:12px; font-family: 'Nata Sans', sans-serif; }
+.muted { color: #666; margin: 0 0 10px; }
+</style>
 </head>
 <body>
-  <header>
-    <div class="left-text">Syrian Medical Youth Club — Hub</div>
-    <img src="falcon.png" alt="Falcon" class="center-logo">
-    <button id="logout" class="btn">Log out</button>
-  </header>
+<header>
+  <div class="left-text">Syrian Medical Youth Club — Hub</div>
+  <img src="falcon.png" alt="Falcon" class="center-logo">
+  <button id="logout">Log out</button>
+</header>
 
-  <main>
-    <div class="card">
-      <h1 id="greet">Welcome!</h1>
-      <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
-    </div>
+<main>
+  <div class="card">
+    <h1 id="greet">Welcome!</h1>
+    <p class="muted">This is your dashboard. We’ll add exclusive features here next.</p>
+  </div>
 
-    <div class="card stats-card">
-      <h2>Website Stats</h2>
-      <p>Total Users: <span id="total-users" style="color: red; font-weight: bold;">0</span></p>
-      <p>Active Users (last 24h): <span id="active-users" style="color: green; font-weight: bold;">0</span></p>
-    </div>
-  </main>
+  <div class="card stats-card">
+    <h2>Website Stats</h2>
+    <p>Total Users: <span id="total-users" style="color: red; font-weight: bold;">0</span></p>
+    <p>Active Users: <span id="active-users" style="color: green; font-weight: bold;">0</span></p>
+  </div>
+</main>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, getDocs, doc, getDoc, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
-      authDomain: "syrian-medical-youth-club.firebaseapp.com",
-      projectId: "syrian-medical-youth-club",
-      storageBucket: "syrian-medical-youth-club.firebasestorage.app",
-      messagingSenderId: "596607910050",
-      appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyCjBq-8xOGMpEwUBLeqQnqnSPJIVA2O1Lo",
+  authDomain: "syrian-medical-youth-club.firebaseapp.com",
+  projectId: "syrian-medical-youth-club",
+  storageBucket: "syrian-medical-youth-club.firebasestorage.app",
+  messagingSenderId: "596607910050",
+  appId: "1:596607910050:web:baddd2c25589282dc9d7fb"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    const greetEl = document.getElementById('greet');
-    const logoutBtn = document.getElementById('logout');
+const greetEl = document.getElementById('greet');
+const logoutBtn = document.getElementById('logout');
 
-    async function updateStats() {
-      try {
-        const usersRef = collection(db, "users");
+let userRef;
 
-        // Total users
-        const allUsersSnap = await getDocs(usersRef);
-        document.getElementById("total-users").textContent = allUsersSnap.size;
+// --- Update stats ---
+async function updateStats() {
+  try {
+    const usersRef = collection(db, "users");
+    const allUsersSnap = await getDocs(usersRef);
+    document.getElementById("total-users").textContent = allUsersSnap.size;
 
-        // Active users (last 24h)
-        const oneDayAgo = Timestamp.fromMillis(Date.now() - 24 * 60 * 60 * 1000);
-        const activeQuery = query(usersRef, where("lastLogin", ">=", oneDayAgo));
-        const activeSnap = await getDocs(activeQuery);
-        document.getElementById("active-users").textContent = activeSnap.size;
-      } catch (err) {
-        console.error("Error fetching stats:", err);
-      }
-    }
+    const activeQuery = query(usersRef, where("isOnline", "==", true));
+    const activeSnap = await getDocs(activeQuery);
+    document.getElementById("active-users").textContent = activeSnap.size;
+  } catch(err) {
+    console.error("Error fetching stats:", err);
+  }
+}
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = 'sign-in.html';
-        return;
-      }
+// --- Auth & online status ---
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = 'sign-in.html';
+    return;
+  }
 
-      // Greet user
-      try {
-        const snap = await getDoc(doc(db, 'users', user.uid));
-        const username = snap.exists() ? (snap.data().username || user.email) : user.email;
-        greetEl.textContent = `Welcome, ${username}!`;
-      } catch {
-        greetEl.textContent = `Welcome, ${user.email}!`;
-      }
-// Reference to the current user's document
-const userRef = doc(db, 'users', user.uid);
+  userRef = doc(db, 'users', user.uid);
 
-// Set user online immediately
-await updateDoc(userRef, { isOnline: true, lastActive: serverTimestamp() });
+  // Greet
+  try {
+    const snap = await getDoc(userRef);
+    const username = snap.exists() ? (snap.data().username || user.email) : user.email;
+    greetEl.textContent = `Welcome, ${username}!`;
+  } catch {
+    greetEl.textContent = `Welcome, ${user.email}!`;
+  }
 
-// Update lastActive every 30 seconds
-setInterval(async () => {
-  await updateDoc(userRef, { lastActive: serverTimestamp() });
-}, 30000);
-      updateStats();
-import { Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  // Set online immediately
+  await updateDoc(userRef, { isOnline: true, lastActive: serverTimestamp() });
 
-// 2 minutes ago
-const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+  // Update lastActive every 30s
+  setInterval(async () => {
+    await updateDoc(userRef, { lastActive: serverTimestamp() });
+  }, 30000);
 
-const activeUsersSnap = await getDocs(
-  query(collection(db, "users"), where("lastActive", ">=", twoMinutesAgo))
-);
-document.getElementById("active-users").textContent = activeUsersSnap.size;
+  // Update stats every 30s
+  updateStats();
+  setInterval(updateStats, 30000);
+});
 
-    });
-
-    logoutBtn.addEventListener('click', async () => {
-      try {
-	await updateDoc(userRef, { isOnline: false });
-        await signOut(auth);
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.href = "sign-in.html";
-      } catch (err) {
-        console.error("Error signing out:", err);
-      }
-    });
-  </script>
+// --- Logout ---
+logoutBtn.addEventListener('click', async () => {
+  try {
+    if (userRef) await updateDoc(userRef, { isOnline: false });
+    await signOut(auth);
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "sign-in.html";
+  } catch(err) {
+    console.error("Error signing out:", err);
+  }
+});
+</script>
 </body>
 </html>
