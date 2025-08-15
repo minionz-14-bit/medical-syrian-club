@@ -146,7 +146,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
     // 🔧 Your Firebase project (Medical Club)
     const firebaseConfig = {
@@ -209,6 +210,9 @@ onAuthStateChanged(auth, (user) => {
         }
 
         await signInWithEmailAndPassword(auth, emailToUse, password);
+// Update lastLogin timestamp for active users
+const userDocRef = doc(db, "users", auth.currentUser.uid);
+await updateDoc(userDocRef, { lastLogin: serverTimestamp() });
         showMsg("✅ Signed in! Redirecting…", true);
         window.location.href = 'dashboard.html';
       } catch (err) {
