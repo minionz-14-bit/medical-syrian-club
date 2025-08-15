@@ -225,6 +225,15 @@ await updateDoc(userDocRef, { lastLogin: serverTimestamp() });
           showMsg("Error: " + (err.message || 'Something went wrong.'));
         }
       }
+import { doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// after signInWithEmailAndPassword(...)
+const user = auth.currentUser;
+if (user) {
+  await updateDoc(doc(db, 'users', user.uid), {
+    lastLogin: serverTimestamp()
+  });
+}
     });
   </script>
 </body>
